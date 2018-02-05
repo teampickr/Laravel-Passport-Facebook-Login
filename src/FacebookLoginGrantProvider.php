@@ -31,6 +31,10 @@ class FacebookLoginGrantProvider extends PassportServiceProvider
         ]);
 
         if (file_exists(storage_path('oauth-private.key'))) {
+            if (!app()->bound(AuthorizationServer::class)) {
+                $this->registerAuthorizationServer();
+            }
+            
             app(AuthorizationServer::class)->enableGrantType($this->makeRequestGrant(), Passport::tokensExpireIn());
         }
     }
